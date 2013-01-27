@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+user_arguments = ARGV.join(" ")
+current_dir = File.expand_path(File.dirname(__FILE__))
+template = "#{current_dir}/../templates/prime.rb"
+
+system "rails new #{user_arguments} -m #{template}"
