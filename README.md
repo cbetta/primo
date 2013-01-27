@@ -7,9 +7,10 @@ Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://word
 ## Usage
 
 ```
+gem install rails
 gem install primo
 
-primo app_name
+primo app_name #instead of "rails new app_name"
 ```
 
 This generates PostgreSQL/HAML/Rspec Rails app using [this template](https://github.com/cbetta/primo/blob/master/templates/prime.rb).
@@ -17,6 +18,7 @@ This generates PostgreSQL/HAML/Rspec Rails app using [this template](https://git
 
 ## Release notes
 
+* **0.0.3** Removed direct Rails dependency
 * **0.0.2** Added simple installer for "Prime stack"
 * **0.0.1** Gem skeleton
 

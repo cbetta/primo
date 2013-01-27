@@ -43,7 +43,6 @@ end
 
 run "rm -rf test"
 run "rm -rf autotest"
-
 run "rails generate rspec:install"
 
 # Specify generators
