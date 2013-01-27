@@ -2,6 +2,8 @@
 
 A better, configurable, default (prime) Rails stack.
 
+Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://words.steveklabnik.com/rails-has-two-default-stacks)
+
 ## Usage
 
 ```
