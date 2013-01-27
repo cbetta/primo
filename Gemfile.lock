@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    primo (0.0.1)
+    primo (0.0.2)
       rails
 
 GEM
