@@ -27,6 +27,14 @@ This generates PostgreSQL/HAML/Rspec Rails app using [this template](https://git
 * **0.0.2** Added simple installer for "Prime stack"
 * **0.0.1** Gem skeleton
 
+## Contributing
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
 ## License
 
 See [LICENSE](https://github.com/cbetta/primo/blob/master/LICENSE)
