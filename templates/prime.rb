@@ -43,7 +43,6 @@ end
 
 run "rm -rf test"
 run "rm -rf autotest"
-run "rails generate rspec:install"
 
 # Specify generators
 application <<-EOF
@@ -52,3 +51,8 @@ application <<-EOF
       g.test_framework      :rspec
     end
 EOF
+
+# Finalize setup
+
+run "bundle"
+run "rails generate rspec:install"

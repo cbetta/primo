@@ -29,6 +29,7 @@ This generates PostgreSQL/HAML/Rspec Rails app using [this template](https://git
 
 ## Release notes
 
+* **0.0.4** Fixing template
 * **0.0.3** Removed direct Rails dependency
 * **0.0.2** Added simple installer for "Prime stack"
 * **0.0.1** Gem skeleton
