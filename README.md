@@ -4,6 +4,12 @@ A better, configurable, default (prime) Rails stack.
 
 Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://words.steveklabnik.com/rails-has-two-default-stacks)
 
+## Why is this useful?
+
+Rails Templates are awesome, especially for hackers that often need to set up the same basic app. Sadly there is currently no sharing between application templates and Primo tries to make this easier.
+
+By default Primo allows you to run a Rails install with a template based on PostgreSQL/HAML/Rspec, but the goal is to eventually allow anyone to specify their default template, or handpick a template on per-project basis.
+
 ## Usage
 
 ```
