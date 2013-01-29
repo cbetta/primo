@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'gli'
-  s.add_dependency 'parseconfig'
+  s.add_dependency 'commander'
+  s.add_dependency 'inifile'
+  s.add_dependency 'terminal-table'
 end

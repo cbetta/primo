@@ -1,30 +1,94 @@
 #!/usr/bin/env ruby
 require 'primo'
-require 'gli'
-require 'fileutils'
+require 'commander/import'
+require 'terminal-table'
 
-include GLI::App
+program :name, 'Primo'
+program :version, Primo::VERSION
+program :description, 'A configurable default Rails stack using application templates'
+program :help, "Author", "Cristiano Betta <cbetta@gmail.com>"
 
-program_desc 'A configurable default Rails stack using application templates'
-
-flag [:t,:template], :default_value => Primo.current_template
-
-desc 'Create a new Rails app'
-long_desc "Create a new Rails app using your default template"
-command :new do |c|
-  c.action do |global_options,_,args|
-    help_now!('Please specify name for your new Rails app') if args.length != 1
-    Primo.create args.first, global_options[:template]
+command :"new" do |c|
+  c.syntax = 'primo new <name> [options]'
+  c.description = 'Creates a new Rails 3 application with the given name'
+  c.option '--template name', String, 'Override the default template and use the given template'
+  c.action do |args, options|
+    unless args.length == 1
+      command(:help).run("new")
+    else
+      options.default template: Primo.current_template
+      Primo::Creator.new(options.template).create args.first
+    end
   end
 end
 
-desc 'Set default template'
-long_desc "Set the default Rails application template by name, path, or url."
-command :default do |c|
-  c.action do |_,_,args|
-    help_now!('Please specify a template by name, path or url') if args.length != 1
-    Primo.default args.first
+command :"templates default" do |c|
+  c.syntax = 'primo templates default <name>'
+  c.description = 'Sets the default template by name'
+
+  c.action do |args, options|
+    command(:help).run("templates default") unless args.length == 1
+    Primo::Config.instance["default"] = args.first
   end
 end
 
-exit run(ARGV)
+# command :"templates list" do |c|
+#   c.syntax = 'primo templates list'
+#   c.description = 'Displays all know templates'
+#
+#   c.action do |args, options|
+#     command(:help).run("template list") unless args.length == 0
+#   end
+# end
+#
+# command :"templates show" do |c|
+#   c.syntax = 'primo templates show <collection> <name>'
+#   c.description = 'Outputs the template for inspection'
+#
+#   c.action do |args, options|
+#     command(:help).run("template show") unless args.length == 2
+#   end
+# end
+
+command :"collection add" do |c|
+  c.syntax = 'primo collection add <name> <git-repo-url>'
+  c.description = 'Adds a new template collection and clones the contents locally'
+
+  c.action do |args, options|
+    command(:help).run("collection add") unless args.length == 2
+    Primo::Collection.new.add *args
+    say "Added collection '#{args.first}' with url #{args.last}"
+  end
+end
+#
+# command :"collection update" do |c|
+#   c.syntax = 'primo collection update <optional name>'
+#   c.description = 'Update template collection'
+#
+#   c.action do |args, options|
+#     command(:help).run("collection update") unless args.length > 1
+#   end
+# end
+#
+command :"collection list" do |c|
+  c.syntax = 'primo collection list'
+  c.description = 'List know template collection'
+
+  c.action do |args, options|
+    command(:help).run("collection list") unless args.length == 0
+    list = Primo::Collection.new.list
+    table = Terminal::Table.new :headings => ['Name', 'URL'], :rows => list
+    puts table
+  end
+end
+
+command :"collection delete" do |c|
+  c.syntax = 'primo collection delete <name>'
+  c.description = 'Remove a named template collection'
+
+  c.action do |args, options|
+    command(:help).run("collection collection") unless args.length == 1
+    Primo::Collection.new.delete *args
+    say "Removed collection '#{args.first}'"
+  end
+end
