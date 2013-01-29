@@ -8,12 +8,15 @@ Gem::Specification.new do |s|
   s.authors     = ["Cristiano Betta"]
   s.email       = ["cbetta@gmail.com"]
   s.homepage    = "http://github.com/cbetta/primo"
-  s.summary     = "A better, configurable, default (prime) Rails stack."
-  s.description = "A better, configurable, default (prime) Rails stack."
+  s.summary     = "A configurable default Rails stack using application templates"
+  s.description = "A configurable default Rails stack using application templates"
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  s.add_dependency 'gli'
+  s.add_dependency 'parseconfig'
 end
