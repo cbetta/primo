@@ -4,7 +4,7 @@ A configurable default Rails stack.
 
 This is a proof of concept and any feedback is welcome either on [GitHub](https://github.com/cbetta/primo/issues), [Twitter](http://twitter.com/cbetta), or [email](mailto:primo@cgb.im). 
 
-Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://words.steveklabnik.com/rails-has-two-default-stacks) and the awesome Rails application templates.
+Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://words.steveklabnik.com/rails-has-two-default-stacks) and the awesome [Rails application templates](http://edgeguides.rubyonrails.org/rails_application_templates.html#gem-args).
 
 ## Why is this useful?
 
