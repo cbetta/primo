@@ -6,9 +6,13 @@ Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://word
 
 ## Why is this useful?
 
-Rails application templates are awesome, especially for hackers that often need to set up the same basic app. Sadly the ecosystem around them seems to be quite limited. Primo tries to solve this by adding a command line interface for defining your default template and share it with others.
+Rails application templates are awesome, especially for hackers that often need to set up the same basic app, but also for companies that want to promote their best pratices. Sadly the ecosystem around them seems to be quite limited. Primo tries to solve this by adding a command line interface for defining your default template and share it with others.
 
-At the moment Primo allows you to run a Rails install with a template based on PostgreSQL/HAML/Rspec, but the goal is to eventually allow anyone to specify their default template, or handpick a template on per-project basis.
+At the moment Primo allows you to run a Rails install with a template based on PostgreSQL/HAML/Rspec. It also allows you to specify your own default template in a .primo file.
+
+## What is next?
+
+I have been thinking about a "template server" much like rubygems.org to allow people to upload/share their templates and reference them by name. I would love to know if this an idea worth exploring or just silly. [Join the discussion here](https://github.com/cbetta/primo/issues/2)
 
 ## Usage
 
@@ -19,7 +23,7 @@ At the moment Primo allows you to run a Rails install with a template based on P
 
     primo new app_name #instead of "rails new app_name"
 
-This generates a PostgreSQL/HAML/Rspec Rails app using [this template](https://github.com/cbetta/primo/blob/master/templates/prime.rb).
+This generates a PostgreSQL/HAML/Rspec Rails app using [this admittedly very basic template](https://github.com/cbetta/primo/blob/master/templates/prime.rb).
 
 Specify a different build in template (currently only 2) as follows
 
@@ -38,10 +42,11 @@ or edit `~/.primo`:
     default="template_name"
     default="/local/path/to/template.rb"
     default="http://remote.path/to/template.rb"
+    
+## Todos
 
-## Plans
-
-* Think about a "template server" much like rubygems.org to allow people to upload/share their templates and reference them by name.
+* Add tests
+* Look into template server idea
 
 ## Release notes
 
