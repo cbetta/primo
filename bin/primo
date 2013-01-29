@@ -1,7 +1,30 @@
 #!/usr/bin/env ruby
+require 'primo'
+require 'gli'
+require 'fileutils'
 
-user_arguments = ARGV.join(" ")
-current_dir = File.expand_path(File.dirname(__FILE__))
-template = "#{current_dir}/../templates/prime.rb"
+include GLI::App
 
-system "rails new #{user_arguments} -m #{template}"
+program_desc 'A configurable default Rails stack using application templates'
+
+flag [:t,:template], :default_value => Primo.current_template
+
+desc 'Create a new Rails app'
+long_desc "Create a new Rails app using your default template"
+command :new do |c|
+  c.action do |_,_,args|
+    help_now!('Please specify name for your new Rails app') if args.length != 1
+    Primo.create args.first
+  end
+end
+
+desc 'Set default template'
+long_desc "Set the default Rails application template by name, path, or url."
+command :default do |c|
+  c.action do |_,_,args|
+    help_now!('Please specify a template by name, path or url') if args.length != 1
+    Primo.default args.first
+  end
+end
+
+exit run(ARGV)

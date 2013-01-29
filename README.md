@@ -37,8 +37,6 @@ or edit `~/.primo`:
 
 ## Plans
 
-* Allow user to specify custom template (from gem, local, or remote) in a ~/.primo file
-* Add more standard templates to the gem
 * Think about a "template server" much like rubygems.org to allow people to upload/share their templates and reference them by name.
 
 ## Release notes
