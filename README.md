@@ -2,6 +2,8 @@
 
 A configurable default Rails stack.
 
+This is a proof of concept and any feedback is welcome either on [GitHub](https://github.com/cbetta/primo/issues), [Twitter](http://twitter.com/cbetta), or [email](mailto:primo@cgb.im). 
+
 Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://words.steveklabnik.com/rails-has-two-default-stacks) and the awesome Rails application templates.
 
 ## Why is this useful?
