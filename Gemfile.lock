@@ -1,11 +1,15 @@
 PATH
   remote: .
   specs:
-    primo (0.0.3)
+    primo (0.0.5)
+      gli
+      parseconfig
 
 GEM
   remote: http://rubygems.org/
   specs:
+    gli (2.5.4)
+    parseconfig (1.0.2)
 
 PLATFORMS
   ruby
