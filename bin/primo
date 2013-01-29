@@ -12,9 +12,9 @@ flag [:t,:template], :default_value => Primo.current_template
 desc 'Create a new Rails app'
 long_desc "Create a new Rails app using your default template"
 command :new do |c|
-  c.action do |_,_,args|
+  c.action do |global_options,_,args|
     help_now!('Please specify name for your new Rails app') if args.length != 1
-    Primo.create args.first
+    Primo.create args.first, global_options[:template]
   end
 end
 

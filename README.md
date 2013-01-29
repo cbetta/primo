@@ -21,6 +21,10 @@ At the moment Primo allows you to run a Rails install with a template based on P
 
 This generates a PostgreSQL/HAML/Rspec Rails app using [this template](https://github.com/cbetta/primo/blob/master/templates/prime.rb).
 
+Specify a different build in template (currently only 2) as follows
+
+    primo new app_name -t template_name
+
 ### Specify default template
 
 Using a different template is easy. You can specify them locally, remotely, or choose one of the [build in templates](https://github.com/cbetta/primo/blob/master/templates/) by name.
@@ -41,6 +45,7 @@ or edit `~/.primo`:
 
 ## Release notes
 
+* **0.0.6** Allows for overriding of templates
 * **0.0.5** Adds option to set custom default
 * **0.0.4** Fixing template
 * **0.0.3** Removed direct Rails dependency

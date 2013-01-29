@@ -1,3 +1,3 @@
 class Primo
-  VERSION = "0.0.5" unless defined? Primo::VERSION
+  VERSION = "0.0.6" unless defined? Primo::VERSION
 end

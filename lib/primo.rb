@@ -4,8 +4,8 @@ class Primo
 
   CONFIG_FILE = File.expand_path('~/.primo').freeze
 
-  def self.create name
-    system "rails new #{name} -m #{current_template_path}"
+  def self.create name, template
+    system "rails new #{name} -m #{path_for(template)}"
   end
 
   def self.default value
@@ -19,10 +19,9 @@ class Primo
     ParseConfig.new(CONFIG_FILE)["default"]
   end
 
-  def self.current_template_path
-    default = current_template
-    default = File.expand_path("templates/#{default}.rb") unless default =~ /\.rb$/i
-    default
+  def self.path_for template
+    return File.expand_path("templates/#{template}.rb") unless template =~ /\.rb$/i
+    template
   end
 
   def self.ensure_config
