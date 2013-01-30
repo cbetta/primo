@@ -1,5 +1,3 @@
-require "git"
-
 class Primo
   class Git
 
