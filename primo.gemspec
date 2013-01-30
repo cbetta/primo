@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'commander'
   s.add_dependency 'inifile'
   s.add_dependency 'terminal-table'
+  s.add_dependency 'git'
 end

@@ -1,9 +1,10 @@
 PATH
   remote: .
   specs:
-    primo (0.0.7)
+    primo (0.1.0)
       commander
-      parseconfig
+      git
+      inifile
       terminal-table
 
 GEM
@@ -11,8 +12,9 @@ GEM
   specs:
     commander (4.1.3)
       highline (~> 1.6.11)
+    git (1.2.5)
     highline (1.6.15)
-    parseconfig (1.0.2)
+    inifile (2.0.2)
     terminal-table (1.4.5)
 
 PLATFORMS

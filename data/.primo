@@ -1,7 +1,7 @@
 [global]
 # the default template
-default = primo-prime
+default = default-prime
 
 [collections]
 # the default collection for primo
-primo = git://github.com/cbetta/primo-templates.git
+default = git://github.com/cbetta/primo-templates.git

@@ -8,6 +8,8 @@ program :version, Primo::VERSION
 program :description, 'A configurable default Rails stack using application templates'
 program :help, "Author", "Cristiano Betta <cbetta@gmail.com>"
 
+Primo::Config.instance.check_post_install
+
 command :"new" do |c|
   c.syntax = 'primo new <name> [options]'
   c.description = 'Creates a new Rails 3 application with the given name'
@@ -22,8 +24,8 @@ command :"new" do |c|
   end
 end
 
-command :"templates default" do |c|
-  c.syntax = 'primo templates default <name>'
+command :"template default" do |c|
+  c.syntax = 'primo template default <name>'
   c.description = 'Sets the default template by name'
 
   c.action do |args, options|
@@ -32,23 +34,37 @@ command :"templates default" do |c|
   end
 end
 
-# command :"templates list" do |c|
-#   c.syntax = 'primo templates list'
-#   c.description = 'Displays all know templates'
-#
-#   c.action do |args, options|
-#     command(:help).run("template list") unless args.length == 0
-#   end
-# end
-#
-# command :"templates show" do |c|
-#   c.syntax = 'primo templates show <collection> <name>'
-#   c.description = 'Outputs the template for inspection'
-#
-#   c.action do |args, options|
-#     command(:help).run("template show") unless args.length == 2
-#   end
-# end
+command :"template list" do |c|
+  c.syntax = 'primo template list'
+  c.description = 'Displays all know templates'
+
+  c.action do |args, options|
+    command(:help).run("template list") unless args.length == 0
+    list = Primo::Template.list
+    table = Terminal::Table.new :headings => ['Name', 'Collection', 'Path'], :rows => list
+    puts table
+  end
+end
+
+command :"template show" do |c|
+  c.syntax = 'primo template show <name>'
+  c.description = 'Outputs the template for inspection'
+
+  c.action do |args, options|
+    command(:help).run("template show") unless args.length == 1
+    puts Primo::Template.for(args.first).read
+  end
+end
+
+command :"template open" do |c|
+  c.syntax = 'primo template open <name>'
+  c.description = 'Opens the template for inspection'
+
+  c.action do |args, options|
+    command(:help).run("template open") unless args.length == 1
+    `open #{Primo::Template.for(args.first).full_filename}`
+  end
+end
 
 command :"collection add" do |c|
   c.syntax = 'primo collection add <name> <git-repo-url>'
@@ -56,27 +72,34 @@ command :"collection add" do |c|
 
   c.action do |args, options|
     command(:help).run("collection add") unless args.length == 2
-    Primo::Collection.new.add *args
+    Primo::Collection.add *args
     say "Added collection '#{args.first}' with url #{args.last}"
   end
 end
-#
-# command :"collection update" do |c|
-#   c.syntax = 'primo collection update <optional name>'
-#   c.description = 'Update template collection'
-#
-#   c.action do |args, options|
-#     command(:help).run("collection update") unless args.length > 1
-#   end
-# end
-#
+
+command :"collection update" do |c|
+  c.syntax = 'primo collection update <optional name>'
+  c.description = 'Update template collection'
+
+  c.action do |args, options|
+    command(:help).run("collection update") if args.length > 1
+    if args.length == 1
+      Primo::Git.new(args.first).update
+    else
+      Primo::Collection.list.each do |key, value|
+        pPrimo::Git.new(key).update
+      end
+    end
+  end
+end
+
 command :"collection list" do |c|
   c.syntax = 'primo collection list'
   c.description = 'List know template collection'
 
   c.action do |args, options|
     command(:help).run("collection list") unless args.length == 0
-    list = Primo::Collection.new.list
+    list = Primo::Collection.list
     table = Terminal::Table.new :headings => ['Name', 'URL'], :rows => list
     puts table
   end
@@ -88,7 +111,7 @@ command :"collection delete" do |c|
 
   c.action do |args, options|
     command(:help).run("collection collection") unless args.length == 1
-    Primo::Collection.new.delete *args
+    Primo::Collection.delete *args
     say "Removed collection '#{args.first}'"
   end
 end

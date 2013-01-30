@@ -1,5 +1,7 @@
 require "parseconfig"
 require "primo/version"
 require "primo/config"
+require "primo/git"
 require "primo/collection"
 require "primo/creator"
+require "primo/template"

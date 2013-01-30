@@ -24,6 +24,14 @@ class Primo
       @config.write
     end
 
+    def check_post_install
+      unless self["post-install-processed"]
+        raise "No template collections specified in ~/.primo" unless initial_collection
+        Primo::Git.new(initial_collection).update
+        self["post-install-processed"] = true
+      end
+    end
+
     private
 
     CONFIG_FILE = File.expand_path('~/.primo').freeze
@@ -35,6 +43,12 @@ class Primo
 
     def ensure_config
       FileUtils.cp("data/.primo", CONFIG_FILE) unless File.exists?(CONFIG_FILE)
+    end
+
+    def initial_collection
+      @config[:collections].keys.first
+    rescue
+      nil
     end
   end
 end
