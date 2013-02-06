@@ -40,20 +40,4 @@ describe Primo::Config do
       expect(File.new(Primo::Config::CONFIG_FILE).mtime).not_to be == created_at
     end
   end
-
-  describe "#check_post_install" do
-    it "on first use it should pull the primo templates" do
-      expect(Primo::Config.instance["post-install-processed"]).to be_nil
-      Primo::Remote.should_receive(:new).with("default")
-      Primo::Config.instance.check_post_install
-      expect(Primo::Config.instance["post-install-processed"]).to be_true
-    end
-
-    it "should only pull the templates in twice" do
-      Primo::Config.instance["post-install-processed"] = true
-      Primo::Remote.should_not_receive(:new)
-      Primo::Config.instance.check_post_install
-    end
-  end
-
 end
