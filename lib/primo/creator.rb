@@ -6,11 +6,13 @@ class Primo
     end
 
     def create name
-      system "rails new #{name} -m #{template_path}"
+      system "rails new #{name} -m #{template_filename}"
     end
 
-    def template_path
-      Primo::Template.new(template_name).path
+    private
+
+    def template_filename
+      Primo::Template.for(@template_name).expanded_filename
     end
   end
 end
