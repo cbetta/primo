@@ -20,7 +20,7 @@ class Primo
 
     def update
       ensure_cloned
-      system "cd #{directory}; git pull -q"
+      system "cd #{directory}; git fetch -q && git reset --hard origin/master -q"
     end
 
     def remove
