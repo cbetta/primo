@@ -1,48 +1,40 @@
 class Primo
   class Template
 
-    attr_accessor :filename, :collection
+    attr_accessor :filename, :remote
 
-    def self.for template_name
-      collection_name, name = template_name.split("-")
-      collection = Primo::Collection.new(collection_name)
+    def self.for display_name
+      remote_name, name = display_name.split("-")
+      remote = Primo::Remote.new(remote_name)
       filename = "#{name}.rb"
-      Primo::Template.new filename, collection
+      Primo::Template.new filename, remote
     end
 
-    def initialize filename, collection
+    def self.list
+      Primo::Remote.list.map do |name, url|
+        Primo::Remote.new(name).templates
+      end.flatten
+    end
+
+    def initialize filename, remote
       @filename = filename
-      @collection = collection
+      @remote = remote
     end
 
-    def full_name
-      "#{collection.name}-#{name}"
+    def display_name
+      "#{remote.name}-#{name}"
     end
 
     def name
       filename[0..-4]
     end
 
-    def full_filename
-      "#{COLLECTIONS_DIRECTORY}/#{collection.name}/#{filename}"
-    end
-
-    def self.list
-      Primo::Collection.list.inject([]) do |results, (name, url)|
-        Primo::Collection.new(name).templates.each do |template|
-          results.push [template.full_name, template.collection.name, template.full_filename]
-        end
-        results
-      end
+    def expanded_filename
+      "#{Primo::Remote::DIRECTORY}/#{remote.name}/#{filename}"
     end
 
     def read
-      File.read(full_filename)
+      File.read(expanded_filename)
     end
-
-    private
-
-    COLLECTIONS_DIRECTORY = File.expand_path('~/.primo_collections').freeze
-
   end
 end

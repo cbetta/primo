@@ -2,18 +2,6 @@ require "spec_helper"
 
 describe Primo::Config do
 
-  before :each do
-    data = File.read("data/.primo")
-    FakeFS.activate!
-    FileUtils.mkdir_p "data"
-    File.open("data/.primo", 'w') { |file| file.write(data) }
-  end
-
-  after :each do
-    FakeFS::FileSystem.clear
-    FakeFS.deactivate!
-  end
-
   describe ".instance" do
     it "should create the config file when needed" do
       Primo::Config.instance

@@ -31,7 +31,7 @@ describe Primo::Remote do
 
   describe "#templates" do
     before do
-      remote = Primo::Remote::COLLECTIONS_DIR + "/default"
+      remote = Primo::Remote::DIRECTORY + "/default"
       FileUtils.mkdir_p remote
       FileUtils.touch  "#{remote}/foobar.rb"
       FileUtils.touch  "#{remote}/barbaz.rb"

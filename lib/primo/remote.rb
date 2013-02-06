@@ -1,6 +1,6 @@
 class Primo
   class Remote
-    COLLECTIONS_DIR = File.expand_path('~/.primo_collections').freeze
+    DIRECTORY = File.expand_path('~/.primo_remotes').freeze
 
     def self.list
       Primo::Config.instance.config[:remotes]
@@ -12,7 +12,7 @@ class Primo
       @name = name
       @url = url || Primo::Config.instance.config[:remotes][name]
 
-      unless Primo::Config.instance.config[:remotes][name]
+      if !Primo::Config.instance.config[:remotes][name] && url
         Primo::Config.instance.config[:remotes][name] = url
         Primo::Config.instance.save
       end
@@ -34,7 +34,7 @@ class Primo
     end
 
     def directory
-      "#{COLLECTIONS_DIR}/#{name}"
+      "#{DIRECTORY}/#{name}"
     end
 
     private
