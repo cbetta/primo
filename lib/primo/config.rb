@@ -3,12 +3,17 @@ require "inifile"
 
 class Primo
   class Config
-    include Singleton
+    CONFIG_FILE = File.expand_path('~/.primo').freeze
 
     attr_accessor :config
 
+    def self.instance
+      ensure_dot_file_created
+      @instance ||= Primo::Config.new
+    end
+
     def initialize
-      @config = load_config
+      load_config
     end
 
     def [] key
@@ -17,36 +22,36 @@ class Primo
 
     def []= key,value
       @config["global"][key] = value
-      save_config
+      save
     end
 
-    def save_config
+    def save
       @config.write
     end
 
     def check_post_install
       unless self["post-install-processed"]
         raise "No template collections specified in ~/.primo" unless initial_collection
-        Primo::Git.new(initial_collection).update
+        Primo::Remote.new(initial_collection)
         self["post-install-processed"] = true
       end
     end
 
     private
 
-    CONFIG_FILE = File.expand_path('~/.primo').freeze
-
     def load_config
-      ensure_config
-      IniFile.new(filename: CONFIG_FILE)
+      @config ||= IniFile.new(filename: CONFIG_FILE)
     end
 
-    def ensure_config
-      FileUtils.cp("data/.primo", CONFIG_FILE) unless File.exists?(CONFIG_FILE)
+    def self.ensure_dot_file_created
+      unless File.exists?(CONFIG_FILE)
+        FileUtils.cp("data/.primo", CONFIG_FILE)
+        @instance = nil
+      end
     end
 
     def initial_collection
-      @config[:collections].keys.first
+      @config[:remotes].keys.first
     rescue
       nil
     end

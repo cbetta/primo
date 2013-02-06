@@ -2,6 +2,6 @@
 # the default template
 default = default-prime
 
-[collections]
-# the default collection for primo
+[remotes]
+# the default remotes for primo
 default = git://github.com/cbetta/primo-templates.git
