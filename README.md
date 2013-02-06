@@ -2,7 +2,7 @@
 
 A configurable default Rails stack.
 
-This is a proof of concept and any feedback is welcome either on [GitHub](https://github.com/cbetta/primo/issues), [Twitter](http://twitter.com/cbetta), or [email](mailto:primo@cgb.im). 
+This is a proof of concept and any feedback is welcome either on [GitHub](https://github.com/cbetta/primo/issues), [Twitter](http://twitter.com/cbetta), or [email](mailto:primo@cgb.im).
 
 Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://words.steveklabnik.com/rails-has-two-default-stacks) and the awesome [Rails application templates](http://edgeguides.rubyonrails.org/rails_application_templates.html#gem-args).
 
@@ -10,48 +10,65 @@ Inspired by Steve Klabnik's article ["Rails has Two Default Stacks"](http://word
 
 Rails application templates are awesome, especially for hackers that often need to set up the same basic app, but also for companies that want to promote their best pratices. Sadly the ecosystem around them seems to be quite limited. Primo tries to solve this by adding a command line interface for defining your default template and share it with others.
 
-At the moment Primo allows you to run a Rails install with a template based on PostgreSQL/HAML/Rspec. It also allows you to specify your own default template in a .primo file.
-
-## What is next?
-
-I have been thinking about a "template server" much like rubygems.org to allow people to upload/share their templates and reference them by name. I would love to know if this an idea worth exploring or just silly. [Join the discussion here](https://github.com/cbetta/primo/issues/2)
+At the moment Primo comes with [1 bundle of templates](https://github.com/cbetta/primo-templates) but it is relatively easy to add your own.
 
 ## Usage
 
 ### Basic
 
-    gem install rails
-    gem install primo
+    $ gem install rails
+    $ gem install primo
 
-    primo new app_name #instead of "rails new app_name"
+    $ primo new app_name #instead of "rails new app_name"
 
-This generates a PostgreSQL/HAML/Rspec Rails app using [this admittedly very basic template](https://github.com/cbetta/primo/blob/master/templates/prime.rb).
+This generates a PostgreSQL/HAML/Rspec Rails app using [this admittedly very basic template](https://github.com/cbetta/primo-templates/blob/master/prime.rb).
 
-Specify a different build in template (currently only 2) as follows
+You can specify a different template as follows
 
-    primo new app_name -t template_name
+    $ primo new app_name --template default-rails # this just runs a plain rails install
 
-### Specify default template
+### Advanced
 
-Using a different template is easy. You can specify them locally, remotely, or choose one of the [build in templates](https://github.com/cbetta/primo/blob/master/templates/) by name.
+Using a different template is easy. You can specify them any remote repository and bring in those templates.
 
-    primo default template_name                     # one of the provided templates
-    primo default /local/path/to/template.rb        # a full path (or relative to home) to the template file
-    primo default http://remote.path/to/template.rb # a url pointing to a template file
+    # add a new remote
+    $ primo remote add <name> <git url> #pulls the templates into ~/primo_remotes/<name>/
 
-or edit `~/.primo`:
+    # list all remotes
+    $ primo remote list
 
-    default="template_name"
-    default="/local/path/to/template.rb"
-    default="http://remote.path/to/template.rb"
-    
-## Todos
+    # remove a remote
+    $ primo remote rm <name>
 
-* Add tests
-* Look into template server idea
+    # update a remote by pulling in changes
+    $ primo remote pull <name>
+
+To use templates and set a different default:
+
+    # list all templates in all pulled remotes
+    $ primo template list
+    +---------------+---------+-----------------------------------------------+
+    | Name          | Remote  | Path                                          |
+    +---------------+---------+-----------------------------------------------+
+    | default-rails | default | /home/vagrant/.primo_remotes/default/rails.rb |
+    | default-prime | default | /home/vagrant/.primo_remotes/default/prime.rb |
+    +---------------+---------+-----------------------------------------------+
+
+    # view a template content
+    $ primo template show <name>
+
+    # open a template in your editor
+    $ primo template open <name>
+
+    # set your default template to use when creating new projects
+    $ primo template default <name>
+
+    # see your current default
+    $ primo template default
 
 ## Release notes
 
+* **0.1.0** Changed syntax. Now uses infrastructure that supports remotes
 * **0.0.6** Allows for overriding of templates
 * **0.0.5** Adds option to set custom default
 * **0.0.4** Fixing template
