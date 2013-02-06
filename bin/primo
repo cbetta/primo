@@ -10,7 +10,7 @@ program :help, "Author", "Cristiano Betta <cbetta@gmail.com>"
 
 Primo.ensure_git_installed
 Primo.ensure_rails_installed
-Primo.ensure_ininial_remote_pulled
+Primo.ensure_initial_remote_pulled
 
 command :"new" do |c|
   c.syntax = 'primo new <name> [options]'

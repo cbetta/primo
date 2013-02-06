@@ -23,7 +23,7 @@ class Primo
     exit(1)
   end
 
-  def self.ensure_ininial_remote_pulled
+  def self.ensure_initial_remote_pulled
     unless Primo::Config.instance["post-install-processed"]
       raise "No template collections specified in ~/.primo" unless self.initial_collection
       Primo::Remote.new(self.initial_collection).update
