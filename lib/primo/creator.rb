@@ -6,13 +6,12 @@ class Primo
     end
 
     def create name
-      system "rails new #{name} -m #{template_filename}"
+      template.remote.ensure_cloned
+      system "rails new #{name} -m #{template.expanded_filename}"
     end
 
-    private
-
-    def template_filename
-      Primo::Template.for(@template_name).expanded_filename
+    def template
+      @template ||= Primo::Template.for(@template_name)
     end
   end
 end

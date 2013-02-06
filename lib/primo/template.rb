@@ -16,6 +16,14 @@ class Primo
       end.flatten
     end
 
+    def self.default
+      Primo::Config.instance["default"]
+    end
+
+    def self.default= value
+      Primo::Config.instance["default"] = value
+    end
+
     def initialize filename, remote
       @filename = filename
       @remote = remote

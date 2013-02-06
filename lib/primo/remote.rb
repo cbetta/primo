@@ -37,15 +37,15 @@ class Primo
       "#{DIRECTORY}/#{name}"
     end
 
-    private
-
     def ensure_cloned
       unless File.exists? "#{directory}/.git"
         system "git clone #{url} #{directory} -q"
       end
     rescue
-      # try next time
+      raise "Could not load templates from #{url}"
     end
+
+    private
 
     def template_names
       Dir.entries(directory).select do |filename|

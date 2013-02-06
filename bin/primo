@@ -18,7 +18,7 @@ command :"new" do |c|
     unless args.length == 1
       command(:help).run("new")
     else
-      options.default template: Primo.current_template
+      options.default template: Primo::Template.default
       Primo::Creator.new(options.template).create args.first
     end
   end
@@ -29,8 +29,15 @@ command :"template default" do |c|
   c.description = 'Sets the default template by name'
 
   c.action do |args, options|
-    command(:help).run("templates default") unless args.length == 1
-    Primo::Config.instance["default"] = args.first
+    command(:help).run("templates default") if args.length > 1
+
+    if args.length == 1
+      list = Primo::Template.list.map {|template| template.display_name}
+      raise "No such template found" unless list.include? args.first
+      Primo::Template.default = args.first
+    else
+      puts Primo::Template.default
+    end
   end
 end
 
@@ -40,8 +47,8 @@ command :"template list" do |c|
 
   c.action do |args, options|
     command(:help).run("template list") unless args.length == 0
-    list = Primo::Template.list
-    table = Terminal::Table.new :headings => ['Name', 'Collection', 'Path'], :rows => list
+    list = Primo::Template.list.map {|template| [template.display_name, template.remote.name, template.expanded_filename]}
+    table = Terminal::Table.new :headings => ['Name', 'Remote', 'Path'], :rows => list
     puts table
   end
 end
@@ -62,56 +69,58 @@ command :"template open" do |c|
 
   c.action do |args, options|
     command(:help).run("template open") unless args.length == 1
-    `open #{Primo::Template.for(args.first).full_filename}`
+    `open #{Primo::Template.for(args.first).expanded_filename}`
   end
 end
 
-command :"collection add" do |c|
-  c.syntax = 'primo collection add <name> <git-repo-url>'
-  c.description = 'Adds a new template collection and clones the contents locally'
+command :"remote add" do |c|
+  c.syntax = 'primo remote add <name> <git-repo-url>'
+  c.description = 'Adds a new template remote repo and clones the contents locally'
 
   c.action do |args, options|
-    command(:help).run("collection add") unless args.length == 2
-    Primo::Collection.add *args
-    say "Added collection '#{args.first}' with url #{args.last}"
+    command(:help).run("remote add") unless args.length == 2
+    Primo::Remote.new(*args).update
+    say "Added remote '#{args.first}' with url #{args.last}"
   end
 end
 
-command :"collection update" do |c|
-  c.syntax = 'primo collection update <optional name>'
-  c.description = 'Update template collection'
+command :"remote pull" do |c|
+  c.syntax = 'primo remote pull <optional name>'
+  c.description = 'Update template remote repo'
 
   c.action do |args, options|
-    command(:help).run("collection update") if args.length > 1
+    command(:help).run("remote pull") if args.length > 1
     if args.length == 1
-      Primo::Git.new(args.first).update
+      Primo::Remote.new(args.first).update
+      puts "Updated remote `#{args.first}`"
     else
-      Primo::Collection.list.each do |key, value|
-        pPrimo::Git.new(key).update
+      Primo::Remote.list.each do |key, value|
+        Primo::Remote.new(key).update
+        puts "Updated remote `#{key}`"
       end
     end
   end
 end
 
-command :"collection list" do |c|
-  c.syntax = 'primo collection list'
-  c.description = 'List know template collection'
+command :"remote list" do |c|
+  c.syntax = 'primo remote list'
+  c.description = 'List know template remote repos'
 
   c.action do |args, options|
-    command(:help).run("collection list") unless args.length == 0
-    list = Primo::Collection.list
+    command(:help).run("remote list") unless args.length == 0
+    list = Primo::Remote.list
     table = Terminal::Table.new :headings => ['Name', 'URL'], :rows => list
     puts table
   end
 end
 
-command :"collection delete" do |c|
-  c.syntax = 'primo collection delete <name>'
-  c.description = 'Remove a named template collection'
+command :"remote rm" do |c|
+  c.syntax = 'primo remote rm <name>'
+  c.description = 'Remove a named template remote'
 
   c.action do |args, options|
-    command(:help).run("collection collection") unless args.length == 1
-    Primo::Collection.delete *args
-    say "Removed collection '#{args.first}'"
+    command(:help).run("remote rm") unless args.length == 1
+    Primo::Remote.new(*args).remove
+    say "Removed remote '#{args.first}'"
   end
 end
