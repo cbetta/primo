@@ -12,11 +12,15 @@ Rails application templates are awesome, especially for hackers that often need 
 
 At the moment Primo comes with [1 bundle of templates](https://github.com/cbetta/primo-templates) but it is relatively easy to add your own.
 
+## Requirements
+
+* Rails
+* Git
+
 ## Usage
 
 ### Basic
 
-    $ gem install rails
     $ gem install primo
 
     $ primo new app_name #instead of "rails new app_name"
