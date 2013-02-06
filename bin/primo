@@ -8,6 +8,8 @@ program :version, Primo::VERSION
 program :description, 'A configurable default Rails stack using application templates'
 program :help, "Author", "Cristiano Betta <cbetta@gmail.com>"
 
+Primo.ensure_git_installed
+Primo.ensure_rails_installed
 Primo::Config.instance.check_post_install
 
 command :"new" do |c|

@@ -11,6 +11,7 @@ class Primo
     end
 
     def template
+      raise ArgumentError, "No such template found (#{@template_name})" unless Primo::Template.exists? @template_name
       @template ||= Primo::Template.for(@template_name)
     end
   end

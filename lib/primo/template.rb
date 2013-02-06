@@ -16,11 +16,16 @@ class Primo
       end.flatten
     end
 
+    def self.exists? display_name
+      Primo::Template.list.map{|tp| tp.display_name}.include? display_name
+    end
+
     def self.default
       Primo::Config.instance["default"]
     end
 
     def self.default= value
+      raise ArgumentError, "No such template found" unless Primo::Template.exists?(value)
       Primo::Config.instance["default"] = value
     end
 

@@ -52,6 +52,22 @@ describe Primo::Template do
       end
     end
 
+    describe "#default" do
+      before do
+        Primo::Template.should_receive(:list).and_return([Primo::Template.for("default-rails")])
+      end
+
+      it "should set the default" do
+        expect(Primo::Template.default).not_to be == "default-rails"
+        Primo::Template.default = "default-rails"
+        expect(Primo::Template.default).to be == "default-rails"
+      end
+
+      it "should error if the default template doesn't exist" do
+        expect(-> {Primo::Template.default = "default-foo"}).to raise_error(ArgumentError)
+      end
+    end
+
     describe "#read" do
 
       before do

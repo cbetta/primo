@@ -11,11 +11,7 @@ class Primo
     def initialize name, url = nil
       @name = name
       @url = url || Primo::Config.instance.config[:remotes][name]
-
-      if !Primo::Config.instance.config[:remotes][name] && url
-        Primo::Config.instance.config[:remotes][name] = url
-        Primo::Config.instance.save
-      end
+      ensure_saved
     end
 
     def templates
@@ -46,6 +42,13 @@ class Primo
     end
 
     private
+
+    def ensure_saved
+      if !Primo::Config.instance.config[:remotes][name] && url
+        Primo::Config.instance.config[:remotes][name] = url
+        Primo::Config.instance.save
+      end
+    end
 
     def template_names
       Dir.entries(directory).select do |filename|
