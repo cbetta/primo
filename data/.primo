@@ -1,8 +1,7 @@
-# Specify the default primo template to use for your Rails 3 apps
-default="prime"
+[global]
+# the default template
+default = default-prime
 
-# Alternatively specify a local file
-# default="/local/path/to/template.rb"
-
-# Alternatively specify a URL
-# default="http://remote.path/to/template.rb"
+[remotes]
+# the default remotes for primo
+default = git://github.com/cbetta/primo-templates.git

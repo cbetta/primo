@@ -1,30 +1,39 @@
-require "parseconfig"
+require "primo/version"
+require "primo/config"
+require "primo/remote"
+require "primo/creator"
+require "primo/template"
+require 'rbconfig'
+
 
 class Primo
-
-  CONFIG_FILE = File.expand_path('~/.primo').freeze
-
-  def self.create name, template
-    system "rails new #{name} -m #{path_for(template)}"
+  def self.void
+    void ||= RbConfig::CONFIG['host_os'] =~ /msdos|mswin|djgpp|mingw/ ? 'NUL' : '/dev/null'
   end
 
-  def self.default value
-    ensure_config
-    File.write CONFIG_FILE, File.read(CONFIG_FILE)
-      .gsub(/^default *= *\S*/m, "default = '#{value}'")
+  def self.ensure_git_installed
+    return if system "git --version >>#{self.void} 2>&1"
+    puts "Please install Git before continuing"
+    exit(1)
   end
 
-  def self.current_template
-    ensure_config
-    ParseConfig.new(CONFIG_FILE)["default"]
+  def self.ensure_rails_installed
+    return if system "git --version >>#{self.void} 2>&1"
+    puts "Please install Rails before continuing"
+    exit(1)
   end
 
-  def self.path_for template
-    return File.expand_path("templates/#{template}.rb") unless template =~ /\.rb$/i
-    template
+  def self.ensure_initial_remote_pulled
+    unless Primo::Config.instance["post-install-processed"]
+      raise "No template collections specified in ~/.primo" unless self.initial_collection
+      Primo::Remote.new(self.initial_collection).update
+      Primo::Config.instance["post-install-processed"] = true
+    end
   end
 
-  def self.ensure_config
-    FileUtils.cp("data/.primo", CONFIG_FILE) unless File.exists?(CONFIG_FILE)
+  def self.initial_collection
+    @config[:remotes].keys.first
+  rescue
+    nil
   end
 end

@@ -1,30 +1,128 @@
 #!/usr/bin/env ruby
 require 'primo'
-require 'gli'
-require 'fileutils'
+require 'commander/import'
+require 'terminal-table'
 
-include GLI::App
+program :name, 'Primo'
+program :version, Primo::VERSION
+program :description, 'A configurable default Rails stack using application templates'
+program :help, "Author", "Cristiano Betta <cbetta@gmail.com>"
 
-program_desc 'A configurable default Rails stack using application templates'
+Primo.ensure_git_installed
+Primo.ensure_rails_installed
+Primo.ensure_initial_remote_pulled
 
-flag [:t,:template], :default_value => Primo.current_template
-
-desc 'Create a new Rails app'
-long_desc "Create a new Rails app using your default template"
-command :new do |c|
-  c.action do |global_options,_,args|
-    help_now!('Please specify name for your new Rails app') if args.length != 1
-    Primo.create args.first, global_options[:template]
+command :"new" do |c|
+  c.syntax = 'primo new <name> [options]'
+  c.description = 'Creates a new Rails 3 application with the given name'
+  c.option '--template name', String, 'Override the default template and use the given template'
+  c.action do |args, options|
+    unless args.length == 1
+      command(:help).run("new")
+    else
+      options.default template: Primo::Template.default
+      Primo::Creator.new(options.template).create args.first
+    end
   end
 end
 
-desc 'Set default template'
-long_desc "Set the default Rails application template by name, path, or url."
-command :default do |c|
-  c.action do |_,_,args|
-    help_now!('Please specify a template by name, path or url') if args.length != 1
-    Primo.default args.first
+command :"template default" do |c|
+  c.syntax = 'primo template default <name>'
+  c.description = 'Sets the default template by name'
+
+  c.action do |args, options|
+    command(:help).run("templates default") if args.length > 1
+
+    if args.length == 1
+      list = Primo::Template.list.map {|template| template.display_name}
+      raise "No such template found" unless list.include? args.first
+      Primo::Template.default = args.first
+    else
+      puts Primo::Template.default
+    end
   end
 end
 
-exit run(ARGV)
+command :"template list" do |c|
+  c.syntax = 'primo template list'
+  c.description = 'Displays all know templates'
+
+  c.action do |args, options|
+    command(:help).run("template list") unless args.length == 0
+    list = Primo::Template.list.map {|template| [template.display_name, template.remote.name, template.expanded_filename]}
+    table = Terminal::Table.new :headings => ['Name', 'Remote', 'Path'], :rows => list
+    puts table
+  end
+end
+
+command :"template show" do |c|
+  c.syntax = 'primo template show <name>'
+  c.description = 'Outputs the template for inspection'
+
+  c.action do |args, options|
+    command(:help).run("template show") unless args.length == 1
+    puts Primo::Template.for(args.first).read
+  end
+end
+
+command :"template open" do |c|
+  c.syntax = 'primo template open <name>'
+  c.description = 'Opens the template for inspection'
+
+  c.action do |args, options|
+    command(:help).run("template open") unless args.length == 1
+    `open #{Primo::Template.for(args.first).expanded_filename}`
+  end
+end
+
+command :"remote add" do |c|
+  c.syntax = 'primo remote add <name> <git-repo-url>'
+  c.description = 'Adds a new template remote repo and clones the contents locally'
+
+  c.action do |args, options|
+    command(:help).run("remote add") unless args.length == 2
+    Primo::Remote.new(*args).update
+    say "Added remote '#{args.first}' with url #{args.last}"
+  end
+end
+
+command :"remote pull" do |c|
+  c.syntax = 'primo remote pull <optional name>'
+  c.description = 'Update template remote repo'
+
+  c.action do |args, options|
+    command(:help).run("remote pull") if args.length > 1
+    if args.length == 1
+      Primo::Remote.new(args.first).update
+      puts "Updated remote `#{args.first}`"
+    else
+      Primo::Remote.list.each do |key, value|
+        Primo::Remote.new(key).update
+        puts "Updated remote `#{key}`"
+      end
+    end
+  end
+end
+
+command :"remote list" do |c|
+  c.syntax = 'primo remote list'
+  c.description = 'List know template remote repos'
+
+  c.action do |args, options|
+    command(:help).run("remote list") unless args.length == 0
+    list = Primo::Remote.list
+    table = Terminal::Table.new :headings => ['Name', 'URL'], :rows => list
+    puts table
+  end
+end
+
+command :"remote rm" do |c|
+  c.syntax = 'primo remote rm <name>'
+  c.description = 'Remove a named template remote'
+
+  c.action do |args, options|
+    command(:help).run("remote rm") unless args.length == 1
+    Primo::Remote.new(*args).remove
+    say "Removed remote '#{args.first}'"
+  end
+end
