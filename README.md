@@ -1,6 +1,6 @@
 # Primo
 
-[![Build Status](https://travis-ci.org/cbetta/primo.png?branch=master)](https://travis-ci.org/cbetta/primo)[![Code Climate](https://codeclimate.com/github/cbetta/primo.png)](https://codeclimate.com/github/cbetta/primo)
+[![Build Status](https://travis-ci.org/cbetta/primo.png?branch=master)](https://travis-ci.org/cbetta/primo) [![Code Climate](https://codeclimate.com/github/cbetta/primo.png)](https://codeclimate.com/github/cbetta/primo)
 
 A configurable default Rails stack.
 
