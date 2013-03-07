@@ -16,7 +16,7 @@ At the moment Primo comes with [1 bundle of templates](https://github.com/cbetta
 
 ## Requirements
 
-* Rails
+* Rails 1.9.3
 * Git
 
 ## Usage
