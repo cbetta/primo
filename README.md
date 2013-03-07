@@ -1,5 +1,7 @@
 # Primo
 
+[![Code Climate](https://codeclimate.com/github/cbetta/primo.png)](https://codeclimate.com/github/cbetta/primo)
+
 A configurable default Rails stack.
 
 This is a proof of concept and any feedback is welcome either on [GitHub](https://github.com/cbetta/primo/issues), [Twitter](http://twitter.com/cbetta), or [email](mailto:primo@cgb.im).
